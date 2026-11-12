@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "archived_on": "2026-11-11",
+  "status": "user_reviewed_workflow",
+  "task": "Joint knee cartilage and meniscus segmentation",
+  "verification": "User reports satisfactory final workflow results. Release copy preserves the selected source checkpoint; no model inference was run during packaging.",
+  "labels": {
+    "0": "background",
+    "1": "femoral cartilage",
+    "2": "tibial cartilage",
+    "3": "meniscus label 3 (side mapping unconfirmed)",
+    "4": "meniscus label 4 (side mapping unconfirmed)"
+  },
+  "models": [
+    {
+      "name": "joint_unet_4echo_five_losses",
+      "checkpoint": "joint_unet_4echo_five_losses.pt",
+      "sha256": "335323df05476b8ba6b549d119f751693eba1e26abfab357bb557ef9cdf59868",
+      "bytes": 28717828,
+      "original_checkpoint": "models/Network-UNet/Unet_res_no-3/fold_number-3/loss_fn-CV_loss_Dice_loss_IoU_loss_Tversky_loss_Lovasz_softmax_loss/normalize-True/num_echos-4/out_channel-5/scheduler-CosineAnnealingWarmRestarts/specific_echos-0_2_4_6/z_score-True_epoch7.pt",
+      "original_config": "inference_configs/cart_men_config.csv",
+      "original_config_row_zero_based": 0,
+      "preserved_config": "joint_unet_4echo_five_losses.csv",
+      "preserved_config_row_zero_based": 0,
+      "recorded_mean_dice": 0.71443886,
+      "results_source": "results/men_results.csv",
+      "epoch": 7,
+      "inference": {
+        "Network": "UNet",
+        "Unet_res_no": 3,
+        "num_echos": 4,
+        "specific_echos": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "out_channel": 5,
+        "normalize": true,
+        "z_score": true,
+        "crop_size": 256,
+        "window_size": 32
+      }
+    }
+  ]
+}

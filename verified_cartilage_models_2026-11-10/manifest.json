@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "archived_on": "2026-11-10",
+  "task": "Knee cartilage segmentation",
+  "verification": "User reported all three models run successfully on server. Copies verified by SHA-256; recorded Dice scores were not rerun.",
+  "labels": {
+    "0": "background",
+    "1": "femoral cartilage",
+    "2": "tibial cartilage"
+  },
+  "models": [
+    {
+      "name": "top1_unet_4echo",
+      "checkpoint": "top1_unet_4echo.pt",
+      "sha256": "120fd8c48f4f97b7588cb6fce8d86c821d262ee83463db9f50d8b10043ced112",
+      "bytes": 28709188,
+      "original_checkpoint": "models_/Network-UNet/Unet_res_no-3/fold_number-3/loss_fn-CV_loss_Dice_loss_IoU_loss_Tversky_loss_Lovasz_softmax_loss/normalize-True/num_echos-4/scheduler-CosineAnnealingWarmRestarts/specific_echos-0_2_4_6/z_score-True_epoch1.pt",
+      "original_config": "config_csv/model_ablation/MRI/Unets_multi_4.csv",
+      "original_config_row_zero_based": 8,
+      "preserved_config": "top1_unet_4echo.csv",
+      "preserved_config_row_zero_based": 0,
+      "recorded_mean_dice": 0.802451182495464,
+      "epoch": 1,
+      "inference": {
+        "Network": "UNet",
+        "Unet_res_no": 3,
+        "num_echos": 4,
+        "specific_echos": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "out_channel": 3,
+        "normalize": true,
+        "z_score": true,
+        "crop_size": 256,
+        "window_size": 32
+      }
+    },
+    {
+      "name": "top2_unet2_3echo",
+      "checkpoint": "top2_unet2_3echo.pt",
+      "sha256": "452cb02dea6fae4088b9b0ebbd82f59ab59ca6cbe10dceb340878466551de680",
+      "bytes": 14448306,
+      "original_checkpoint": "models_/Network-UNet2/Unet_res_no-3/fold_number-3/loss_fn-CV_loss_Dice_loss_IoU_loss_Tversky_loss_Lovasz_softmax_loss/normalize-True/num_echos-3/scheduler-CosineAnnealingWarmRestarts/specific_echos-0_2_4/z_score-True_epoch2.pt",
+      "original_config": "config_csv/model_ablation/MRI/Unets_multi_3.csv",
+      "original_config_row_zero_based": 9,
+      "preserved_config": "top2_unet2_3echo.csv",
+      "preserved_config_row_zero_based": 0,
+      "recorded_mean_dice": 0.7962368943474509,
+      "epoch": 2,
+      "inference": {
+        "Network": "UNet2",
+        "Unet_res_no": 3,
+        "num_echos": 3,
+        "specific_echos": [
+          0,
+          2,
+          4
+        ],
+        "out_channel": 3,
+        "normalize": true,
+        "z_score": true,
+        "crop_size": 256,
+        "window_size": 32
+      }
+    },
+    {
+      "name": "top3_unet2_4echo",
+      "checkpoint": "top3_unet2_4echo.pt",
+      "sha256": "525ef4b12acdf348864dd3b62a8e125d4bef8a289ddeaf10149ad04bb36d4000",
+      "bytes": 14451762,
+      "original_checkpoint": "models_/Network-UNet2/Unet_res_no-3/fold_number-3/loss_fn-CV_loss_Dice_loss_IoU_loss_Tversky_loss_Lovasz_softmax_loss/normalize-True/num_echos-4/scheduler-CosineAnnealingWarmRestarts/specific_echos-0_2_4_6/z_score-True_epoch2.pt",
+      "original_config": "config_csv/model_ablation/MRI/Unets_multi_4.csv",
+      "original_config_row_zero_based": 9,
+      "preserved_config": "top3_unet2_4echo.csv",
+      "preserved_config_row_zero_based": 0,
+      "recorded_mean_dice": 0.7954035401344299,
+      "epoch": 2,
+      "inference": {
+        "Network": "UNet2",
+        "Unet_res_no": 3,
+        "num_echos": 4,
+        "specific_echos": [
+          0,
+          2,
+          4,
+          6
+        ],
+        "out_channel": 3,
+        "normalize": true,
+        "z_score": true,
+        "crop_size": 256,
+        "window_size": 32
+      }
+    }
+  ]
+}

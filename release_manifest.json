@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-11-12",
+  "name": "Knee cartilage and meniscus segmentation",
+  "ui_entrypoint": "start_ui.py",
+  "cli_entrypoint": "run_segmentation.sh",
+  "environment_status": "Install mriforge[io,torch] or mriforge[all], plus nvidia-ml-py; exact dependency versions not pinned",
+  "default_cartilage_model": "verified_cartilage_models_2026-11-10/top3_unet2_4echo.pt",
+  "default_meniscus_model": "verified_meniscus_and_cartilage_models_2026-11-11/joint_unet_4echo_five_losses.pt",
+  "package_layout": "Sibling directories preserved; no dependency on the original research checkout",
+  "original_sources_unchanged": true,
+  "release_only_changes": [
+    "Joint manifest retains only five-loss checkpoint; removes rejected three-loss evaluation entry; marks user-reviewed workflow status",
+    "Joint weight checksum list regenerated for the retained model",
+    "Added root entrypoints and release-specific documentation",
+    "Replaced both release runners MONAI constructors with shared torch_unet.UNet3D; original checkpoints and research runners unchanged",
+    "Added MONAI Apache 2.0 attribution/license and checkpoint/synthetic-parity regression tests",
+    "GPU helper and UI report missing nvidia-ml-py explicitly; utilization-only failures preserve usable GPUs; added diagnostic regression tests",
+    "Added Installation section documenting user-verified MRIForge environment plus nvidia-ml-py, with io/torch extras for fresh installs",
+    "Documented mriforge[all] as an alternative to mriforge[io,torch], each followed by nvidia-ml-py",
+    "Added GRE DICOM series-folder UI input, MRIForge conversion adapter, saved NIfTI/sidecar, conversion progress/cancellation and DICOM regression tests; documented MRIForge conversion compatibility advice",
+    "Prepared standalone repository publishing guide and local .gitignore; documented separate model distribution and made root checksums independent of weights"
+  ],
+  "validation": "Synthetic/mocked tests, checkpoint strict-loading without forward passes, and random-weight synthetic network parity; no MRI inference or patient mask processing",
+  "checks": {
+    "python_tests_passed": 70,
+    "javascript_regression_suites_passed": 3,
+    "bash_syntax": "passed",
+    "root_entrypoint_help_checks": "passed",
+    "packaged_model_catalog": "3 cartilage, 1 joint/meniscus",
+    "checkpoint_hashes": "verified",
+    "original_source_hashes": "unchanged",
+    "real_inference_executed": false,
+    "patient_masks_processed": false,
+    "monai_reference_parity": "Exact CPU logits and argmax labels for all four configurations, plus no-residual variant; two synthetic input shapes each; random weights only",
+    "monai_reference_version": "1.6.0",
+    "torch_validation_version": "2.14.0+cpu",
+    "monai_blocked_import": "Both inference runners --help passed from unrelated working directory with MONAI imports blocked",
+    "checkpoint_strict_loading": "All four preserved checkpoints loaded with strict=True; no checkpoint forward pass executed",
+    "server_inference_after_network_replacement": "pending user verification",
+    "gpu_diagnostics_regression": "Missing nvidia-ml-py remains an explicit utilization warning; driver failures retain their own errors",
+    "dicom_regression": "Synthetic DICOM headers plus mocked standard MRIForge conversion and inference; conversion order, saved NIfTI/sidecar, mixed-series rejection, echo/size checks, cancellation, failures and browser format/selection/progress passed",
+    "dicom_converter_api": "Standard mrif.utilities.io.dicom_to_nifti, also used by MRIForge CLI; no local pixel reconstruction, reorientation or resampling",
+    "patient_dicoms_converted": false
+  },
+  "runtime_dependencies": [
+    "torch",
+    "numpy",
+    "scipy",
+    "nibabel"
+  ],
+  "network_implementation": "Shared PyTorch-only torch_unet.UNet3D, adapted from MONAI 1.6.0; no runtime MONAI import",
+  "user_environment_verification": "User reports successful execution with their MRIForge installation after adding nvidia-ml-py; no inference run by packaging agent",
+  "dicom_input": {
+    "ui_input_type": "dicom",
+    "converter": "verified_meniscus_and_cartilage_models_2026-11-11/convert_gre_dicom.py",
+    "api": "mrif.utilities.io.dicom_to_nifti",
+    "saved_files": [
+      "converted_input/gre.nii.gz",
+      "converted_input/gre.json"
+    ],
+    "input_scope": "One MR GRE magnitude series directory containing all echoes; mixed series rejected; direct files only",
+    "validation": "Converted 4-D image must provide all selected echo indices and required crop size; no reorientation or resampling after MRIForge",
+    "server_dicom_workflow_verification": "pending user verification"
+  },
+  "dicom_dependencies": [
+    "mriforge[io]",
+    "pydicom",
+    "SimpleITK"
+  ],
+  "distribution": "Standalone inference repository rooted at this directory; trained checkpoints distributed separately",
+  "supported_model_count": 4,
+  "weights_in_git": false,
+  "checksum_scope": "Root SHA256SUMS: published code/documentation/manifests, excluding checkpoints, caches and Git metadata; model directories retain weight-only SHA256SUMS"
+}

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knee segmentation</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#183042;background:#f1f5f7;font-size:15px}*{box-sizing:border-box}body{margin:0}main{max-width:1000px;margin:36px auto;padding:0 22px}h1{font-size:30px;margin:0 0 6px;letter-spacing:-.7px}h2{font-size:18px;margin:0 0 18px}p{line-height:1.5;color:#536879}.card{background:white;border:1px solid #d9e3e9;border-radius:14px;padding:24px;margin:22px 0;box-shadow:0 4px 18px #122c3e05}.row{display:flex;gap:10px;align-items:center}.field{margin-bottom:19px}label{display:block;font-weight:600;margin-bottom:7px}input,select,button{font:inherit;border-radius:7px}input[type=text],input[type=number],select{border:1px solid #b7c9d4;background:#fff;padding:10px 12px;min-width:0;width:100%;color:inherit}input:focus,select:focus{outline:2px solid #54aea7;outline-offset:1px}.row input{flex:1}button{cursor:pointer;border:1px solid #b8cbd6;background:#f7fafb;color:#183042;padding:10px 17px;white-space:nowrap}button:hover{background:#e9f1f4}button.primary{background:#087e78;color:#fff;border-color:#087e78}button.primary:hover{background:#066a65}button.danger{color:#a23636}button:disabled{opacity:.5;cursor:default}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.hint{font-size:13px;color:#637c8e;margin:7px 0 0}.check{display:flex;align-items:center;gap:9px;font-weight:400}.check input{width:17px;height:17px}.actions{display:flex;gap:10px;margin-top:23px}.error{white-space:pre-wrap;color:#a22d2d;background:#fff0ef;padding:12px;border-radius:7px;margin-top:16px}.error:empty{display:none}.badge{font-size:13px;background:#eaf3f4;padding:5px 11px;border-radius:18px;margin-left:auto}progress{width:100%;height:12px;accent-color:#087e78;margin:15px 0}.status{font-weight:600;overflow-wrap:anywhere}.steps{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}.step{font-size:12px;border:1px solid #d4e0e6;border-radius:6px;padding:6px 9px;color:#6b7e8a}.step.done{background:#e5f4ed;border-color:#a8d6bf;color:#246247}.step.active{border-color:#087e78;color:#087e78;background:#eef9f7}.outputs{padding-left:20px;overflow-wrap:anywhere;line-height:1.7}.log{background:#152836;color:#d6e7eb;border-radius:8px;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow-y:auto;font:12px/1.6 ui-monospace,monospace}summary{cursor:pointer;margin:10px 0}.foot{font-size:12px;color:#68808f;overflow-wrap:anywhere}dialog{border:1px solid #c6d5df;border-radius:12px;width:min(760px,95vw);max-height:85vh;padding:23px}dialog::backdrop{background:#142d4280}.browser-list{height:330px;overflow-y:auto;margin:15px 0;border:1px solid #e0e7ec;border-radius:7px}.entry{display:block;width:100%;text-align:left;border:none;border-bottom:1px solid #edf1f4;border-radius:0;white-space:normal;overflow-wrap:anywhere;padding:11px 14px;background:white}.empty{padding:15px}.browser-actions{display:flex;justify-content:space-between;gap:10px}.path{overflow-wrap:anywhere;font-size:13px;color:#526d7e;margin:12px 0}@media(max-width:600px){.grid{grid-template-columns:1fr;gap:0}.card{padding:18px}main{padding:0 12px}.row button{padding:10px}.steps{gap:4px}}
+</style>
+</head>
+<body><main>
+<h1>Knee segmentation</h1>
+<p>Cartilage and menisci from multi-echo MRI. Choose a scan and output folder, then run the pipeline.</p>
+<section class="card"><h2>Run settings</h2>
+<form id="runForm">
+<fieldset id="settings" style="border:0;padding:0;margin:0">
+<div class="field"><label for="inputType">Input format</label><select id="inputType"><option value="nifti">NIfTI file</option><option value="dicom">GRE DICOM series folder</option></select></div>
+<div class="field"><label for="input" id="inputLabel">Input MRI</label><div class="row"><input id="input" type="text" placeholder="/path/to/multi_echo_GRE.nii.gz" required><button type="button" id="browseInput">Browse files</button></div><p class="hint" id="inputHint">Select an original multi-echo NIfTI on the server, with echoes in the last dimension. Always use MRIForge DICOM-to-NIfTI conversion for compatible results.</p></div>
+<div class="field"><label for="outputParent">Output parent folder</label><div class="row"><input id="outputParent" type="text" placeholder="/path/to/results" required><button type="button" id="browseOutput">Browse parent folder</button></div><p class="hint">Choose the existing server folder that will contain your new results folder.</p></div>
+<div class="field"><label for="outputName">New results folder name</label><input id="outputName" type="text" placeholder="output_dir" required><p class="hint">Enter only the new folder name, without slashes. It will be created when the run starts.</p><p id="outputPreview" class="path" role="status">Choose a parent folder and enter a new folder name.</p></div>
+<div class="grid"><div class="field"><label for="device">Compute device</label><select id="device" required><option value="auto">Auto — most free GPU memory</option><option value="cpu">CPU</option></select><p class="hint">Auto chooses the visible GPU with the most free memory. Select a detected GPU below, or choose CPU. Refresh GPUs updates this list.</p></div><div class="field"><label for="radius">Meniscus correction radius (mm)</label><input id="radius" type="number" min="0.001" max="100" step="any" value="1.0" required><p class="hint">Controls proximity relabelling in both passes. Unprotected label-4 residue within 1 mm of trusted label 3 is removed; deleted clusters touching label 3 from at least two face directions become label 3; others become background.</p></div></div>
+<label class="check"><input id="echoes" type="checkbox" checked>Create an additional mask covering every echo</label>
+</fieldset>
+<div style="margin-top:20px;padding:15px;background:#f5f9fa;border-radius:8px">
+<div class="row"><strong>GPU availability</strong><button type="button" id="refreshGPUs" style="margin-left:auto">Refresh GPUs</button></div>
+<p id="gpuSummary" class="hint" role="status">Checking visible GPUs…</p>
+<div id="gpuList" style="overflow-wrap:anywhere"></div>
+<p class="hint">Checked again when you start a run. Free memory is a snapshot, not a GPU reservation.</p>
+</div>
+<div class="actions"><button class="primary" id="run" type="submit">Run segmentation</button><button class="danger" id="stop" type="button" disabled>Stop run</button></div>
+<div id="error" class="error" role="alert"></div>
+</form></section>
+<section class="card"><div class="row"><h2 style="margin:0">Progress</h2><span id="badge" class="badge">Ready</span></div>
+<p id="message" class="status" role="status">Connecting…</p><progress id="progress" max="5" value="0"></progress>
+<div class="steps" id="steps"></div>
+<div id="resultArea" hidden><strong>Saved results</strong><ul id="outputs" class="outputs"></ul></div>
+<details open><summary>Processing log</summary><pre id="log" class="log">No run started.</pre></details>
+<button id="downloadLog" type="button">Save log</button>
+</section>
+<section class="card" id="networksPanel"><h2>Networks</h2>
+<fieldset id="networkSettings" form="runForm" style="border:0;padding:0;margin:0">
+<div class="field"><label for="cartilageModel">Cartilage network</label><select id="cartilageModel" form="runForm"><option value="">Current default: top3 UNet2, 4 echoes</option></select><p id="cartilageModelInfo" class="hint">Default stays selected unless you change it.</p><div id="cartilageCustom" hidden><label for="cartilageModelPath">Custom cartilage checkpoint</label><div class="row"><input id="cartilageModelPath" form="runForm" type="text" placeholder="/path/to/model.pt" disabled><button id="browseCartilageModel" type="button">Browse</button></div></div></div>
+<div class="field"><label for="meniscusModel">Meniscus network</label><select id="meniscusModel" form="runForm"><option value="">Current default: five-loss joint UNet</option></select><p id="meniscusModelInfo" class="hint">Only the meniscus labels from this network are used.</p><div id="meniscusCustom" hidden><label for="meniscusModelPath">Custom meniscus checkpoint</label><div class="row"><input id="meniscusModelPath" form="runForm" type="text" placeholder="/path/to/model.pt" disabled><button id="browseMeniscusModel" type="button">Browse</button></div></div></div>
+<p class="hint">Custom checkpoints need a matching manifest.json beside them. Cartilage uses labels 1/2; the joint meniscus runner uses labels 3/4.</p><div id="modelError" class="error"></div>
+</fieldset>
+</section>
+<p class="foot">Independent cartilage and meniscus network selection · Automatic residue correction before merging · Overlaps use label 5.</p>
+<p id="environment" class="foot"></p>
+</main>
+<dialog id="browser"><h2 id="browserTitle">Browse server</h2><div class="row"><button id="up" type="button">Up</button><input id="browsePath" type="text" aria-label="Server directory"><button id="go" type="button">Go</button></div><p class="hint">Browse directories on the server. You can enter a directory path above.</p><div id="browserError" class="error"></div><div class="browser-list" id="entries"></div><div class="browser-actions"><button id="closeBrowser" type="button">Cancel</button><button class="primary" id="selectFolder" type="button">Use this parent folder</button></div></dialog>
+<script>
+const $=id=>document.getElementById(id);
+const supplied=new URLSearchParams(location.search).get('token');
+if(supplied){sessionStorage.setItem('segmentationToken',supplied);history.replaceState(null,'',location.pathname);}
+const token=sessionStorage.getItem('segmentationToken')||'';
+let latest=null,startDir='',browseMode='file',browseCurrent='',browseParent='',polling=false;
+let preferredDevice='auto',gpuDevicesLoaded=false;
+let modelData=null,modelBrowserKind='cartilage';
+let restoreSettings=true;
+const modelPreferences={cartilage:null,meniscus:null};
+async function api(path,body){const options={headers:{Authorization:'Bearer '+token}};if(body!==undefined){options.method='POST';options.headers['Content-Type']='application/json';options.body=JSON.stringify(body);}const response=await fetch(path,options);const data=await response.json();if(!response.ok)throw Error(data.error||'Request failed');return data;}
+function showError(error){$('error').textContent=error.message||String(error);}
+function selectedModelPath(kind){const choice=$(kind+'Model').value;return choice==='__custom__'?$(kind+'ModelPath').value.trim():choice;}
+function updateModelChoice(kind){
+    const custom=$(kind+'Model').value==='__custom__';
+    $(kind+'Custom').hidden=!custom;$(kind+'ModelPath').disabled=!custom;$(kind+'ModelPath').required=custom;
+    const info=modelData?.[kind]?.find(model=>model.path===selectedModelPath(kind));
+    $(kind+'ModelInfo').textContent=info?info.network+' · Echo indices: '+info.echoes.join(', ')+' · '+info.path:(custom?'Choose a supported checkpoint with its own inference manifest.':'Current default will be used.');
+}
+function restoreModelSelection(kind,value){
+    if(!value)return;
+    modelPreferences[kind]=value;
+    if(!modelData)return;
+    const choices=$(kind+'Model');
+    if(Array.from(choices.options).some(option=>option.value===value))choices.value=value;
+    else{choices.value='__custom__';$(kind+'ModelPath').value=value;}
+    updateModelChoice(kind);
+}
+function renderModels(data){
+    modelData=data;
+    for(const kind of ['cartilage','meniscus']){
+        const select=$(kind+'Model');
+        const desired=modelPreferences[kind]||select.value||data.defaults[kind];
+        select.replaceChildren();
+        const add=(value,label)=>{const option=document.createElement('option');option.value=value;option.textContent=label;select.append(option);};
+        if(!data[kind].some(model=>model.path===data.defaults[kind]))add(data.defaults[kind],'Current default (unavailable; check path)');
+        for(const model of data[kind])add(model.path,model.name+' — '+model.network+', '+model.echoes.length+' echoes'+(model.default?' (default)':''));
+        add('__custom__','Custom checkpoint…');
+        restoreModelSelection(kind,desired);
+    }
+    $('modelError').textContent=(data.errors||[]).join('\n');
+}
+async function loadModels(){try{renderModels(await api('/api/models'));}catch(error){$('modelError').textContent='Cannot load model catalog: '+error.message;}}
+for(const kind of ['cartilage','meniscus']){
+    $(kind+'Model').onchange=()=>{modelPreferences[kind]=selectedModelPath(kind)||'__custom__';updateModelChoice(kind);};
+    $(kind+'ModelPath').oninput=()=>{modelPreferences[kind]=selectedModelPath(kind)||'__custom__';updateModelChoice(kind);};
+}
+async function openModelBrowser(kind){
+    modelBrowserKind=kind;browseMode='checkpoint';$('browserTitle').textContent='Select '+kind+' checkpoint on the server';
+    $('selectFolder').hidden=true;$('entries').replaceChildren();$('browser').showModal();
+    const path=selectedModelPath(kind)||modelData?.defaults[kind]||startDir+'/model.pt';
+    if(!(await browse(parentOf(path))))await browse(startDir);
+}
+function selectedBrowserFile(path){
+    if(browseMode!=='checkpoint'){selectedFile(path);return;}
+    const kind=modelBrowserKind;$(kind+'Model').value='__custom__';$(kind+'ModelPath').value=path;
+    modelPreferences[kind]=path;updateModelChoice(kind);$('browser').close();
+}
+$('browseCartilageModel').onclick=()=>openModelBrowser('cartilage');$('browseMeniscusModel').onclick=()=>openModelBrowser('meniscus');
+function gib(bytes){return (bytes/1024**3).toFixed(1)+' GiB';}
+function restoreDeviceSelection(value){
+    preferredDevice=value||'auto';
+    const available=Array.from($('device').options).some(option=>option.value===preferredDevice&&!option.disabled);
+    $('device').value=available?preferredDevice:'auto';
+    if(!available&&gpuDevicesLoaded)preferredDevice='auto';
+}
+function populateDeviceOptions(devices){
+    const choices=$('device');choices.replaceChildren();
+    const add=(value,text,disabled=false)=>{const option=document.createElement('option');option.value=value;option.textContent=text;option.disabled=disabled;choices.append(option);};
+    add('auto','Auto — most free GPU memory');add('cpu','CPU');
+    const seen=new Set();
+    for(const gpu of devices){
+        if(seen.has(gpu.device))continue;seen.add(gpu.device);
+        const usable=!gpu.error&&Number.isFinite(gpu.free_bytes)&&gpu.free_bytes>0;
+        const label=gpu.device+' — '+(gpu.name||'GPU')+' — '+(usable?gib(gpu.free_bytes)+' free':'unavailable');
+        add(gpu.device,label,!usable);
+    }
+    gpuDevicesLoaded=true;
+    restoreDeviceSelection(preferredDevice);
+}
+$('device').onchange=()=>{preferredDevice=$('device').value;};
+function renderGPUs(data){
+    $('gpuList').replaceChildren();
+    const visible=data.cuda_visible_devices===null?'not set':data.cuda_visible_devices;
+    if(data.error){$('gpuSummary').textContent=(data.missing_packages&&data.missing_packages.length?'':'GPU check failed: ')+data.error;return;}
+    populateDeviceOptions(data.devices);
+    const readable=data.devices.filter(gpu=>!gpu.error&&Number.isFinite(gpu.free_bytes)&&gpu.free_bytes>0);
+    readable.sort((a,b)=>b.free_bytes-a.free_bytes);
+    const choice=readable.length?readable[0].device:(!data.cuda_available?'CPU':'unavailable');
+    $('gpuSummary').textContent='Checked '+data.checked_at+' · Auto choice now: '+choice+' · CUDA_VISIBLE_DEVICES: '+visible+((data.warnings||[]).length?' · '+data.warnings.join(' · '):'');
+    if(!data.devices.length){const line=document.createElement('p');line.className='hint';line.textContent='No CUDA GPUs are visible in this server session.';$('gpuList').append(line);}
+    for(const gpu of data.devices){const line=document.createElement('p');line.className='hint';line.textContent=gpu.device+' · '+(gpu.name||'GPU')+' · '+(gpu.error?'Unavailable: '+gpu.error:gib(gpu.free_bytes)+' free / '+gib(gpu.total_bytes)+' total')+' · Utilization: '+(Number.isFinite(gpu.utilization_percent)?gpu.utilization_percent+'%':(gpu.utilization_error||'unavailable'));$('gpuList').append(line);}
+}
+async function refreshGPUs(){const button=$('refreshGPUs');button.disabled=true;$('gpuSummary').textContent='Checking visible GPUs…';try{renderGPUs(await api('/api/gpus'));}catch(error){$('gpuSummary').textContent='GPU check failed: '+error.message;}finally{button.disabled=false;}}
+$('refreshGPUs').onclick=refreshGPUs;
+function inputFormat(){return $('inputType').value||'nifti';}
+function updateInputType(){
+    const dicom=inputFormat()==='dicom';
+    $('inputLabel').textContent=dicom?'GRE DICOM series folder':'Input MRI';
+    $('input').placeholder=dicom?'/path/to/GRE_DICOM_series':'/path/to/multi_echo_GRE.nii.gz';
+    $('browseInput').textContent=dicom?'Browse series folder':'Browse files';
+    $('inputHint').textContent=dicom?'Select one GRE magnitude series folder containing all echoes. MRIForge converts it first; the NIfTI and JSON sidecar are saved in converted_input/ inside your results folder.':'Select an original multi-echo NIfTI, with echoes last. Always use MRIForge DICOM-to-NIfTI conversion for compatible results.';
+}
+$('inputType').onchange=()=>{restoreSettings=false;$('input').value='';updateInputType();};
+$('input').oninput=()=>{restoreSettings=false;};
+updateInputType();
+function progressNames(data){
+    const names=['Cartilage','Joint model','Meniscus correction','Merge'];
+    if(data.settings?.input_type==='dicom')names.unshift('DICOM conversion');
+    if(data.settings?data.settings.all_echoes:$('echoes').checked)names.push('All echoes');
+    return names;
+}
+function updateOutputPreview(){const parent=$('outputParent').value.trim();const name=$('outputName').value.trim();const valid=name&&!/[\\/\x00-\x1f]/.test(name)&&name!=='.'&&name!=='..';$('outputName').setCustomValidity(name&&!valid?'Enter one folder name without slashes, such as output_dir.':'');$('outputPreview').textContent=parent&&valid?'Results will be saved to: '+parent.replace(/[\\/]+$/,'')+'/'+name:'Choose a parent folder and enter a new folder name.';}
+function suggestOutputForInput(path){if(!$('outputParent').value)$('outputParent').value=parentOf(path);if(!$('outputName').value)$('outputName').value=path.split(/[\\/]/).pop().replace(/\.nii(\.gz)?$/i,'')+'_results';updateOutputPreview();}
+function selectedFile(path){restoreSettings=false;$('input').value=path;suggestOutputForInput(path);$('browser').close();}
+$('outputParent').oninput=updateOutputPreview;$('outputName').oninput=updateOutputPreview;$('input').onchange=()=>{if($('input').value)suggestOutputForInput($('input').value);};
+function parentOf(path){return path.replace(/[\\/][^\\/]*$/,'')||'/';}
+async function browse(path){$('browserError').textContent='';try{const data=await api('/api/browse?mode='+browseMode+'&path='+encodeURIComponent(path));browseCurrent=data.path;browseParent=data.parent;$('browsePath').value=data.path;$('entries').replaceChildren();for(const item of data.entries){const button=document.createElement('button');button.type='button';button.className='entry';button.textContent=(item.directory?'📁  ':'📄  ')+item.name;button.onclick=()=>item.directory?browse(item.path):selectedBrowserFile(item.path);$('entries').append(button);}if(!data.entries.length){const note=document.createElement('p');note.className='empty';note.textContent='No matching files or subfolders.';$('entries').append(note);}if(data.truncated){const note=document.createElement('p');note.className='empty';note.textContent='Showing the first 1,500 entries. Enter a more specific directory path above.';$('entries').append(note);}return true;}catch(error){$('browserError').textContent=error.message;return false;}}
+async function openBrowser(mode){
+    browseMode=mode;
+    $('browserTitle').textContent=mode==='file'?'Select MRI on the server':mode==='dicom'?'Select the GRE DICOM series folder on the server':'Select the output parent folder on the server';
+    $('selectFolder').textContent=mode==='dicom'?'Use this DICOM series':'Use this parent folder';
+    $('selectFolder').hidden=mode==='file';$('selectFolder').disabled=true;$('entries').replaceChildren();$('browser').showModal();
+    let path=mode==='file'?parentOf($('input').value||startDir+'/scan.nii.gz'):mode==='dicom'?$('input').value||startDir:$('outputParent').value||startDir;
+    while(!(await browse(path))){const parent=parentOf(path);if(parent===path){await browse(startDir);break;}path=parent;}
+    $('selectFolder').disabled=false;
+}
+$('browseInput').onclick=()=>openBrowser(inputFormat()==='dicom'?'dicom':'file');$('browseOutput').onclick=()=>openBrowser('directory');$('up').onclick=()=>browse(browseParent);$('go').onclick=()=>browse($('browsePath').value);$('browsePath').onkeydown=event=>{if(event.key==='Enter'){event.preventDefault();browse($('browsePath').value);}};$('selectFolder').onclick=()=>{if(browseMode==='dicom'){selectedFile(browseCurrent);return;}$('outputParent').value=browseCurrent;updateOutputPreview();$('browser').close();$('outputName').focus();};$('closeBrowser').onclick=()=>$('browser').close();
+function render(data){latest=data;startDir=data.start_dir;const active=['running','stopping'].includes(data.state);$('settings').disabled=active;$('networkSettings').disabled=active;$('run').disabled=active;$('stop').disabled=data.state!=='running';$('badge').textContent=data.state[0].toUpperCase()+data.state.slice(1);$('message').textContent=data.message;$('progress').max=data.total;$('progress').value=data.state==='completed'?data.total:Math.max(0,data.stage-1);$('steps').replaceChildren();const names=progressNames(data);names.forEach((name,index)=>{const node=document.createElement('span');node.className='step'+(data.state==='completed'||index+1<data.stage?' done':active&&index+1===data.stage?' active':'');node.textContent=(index+1)+'. '+name;$('steps').append(node);});const log=$('log');const atBottom=log.scrollTop+log.clientHeight>=log.scrollHeight-30;log.textContent=data.logs.join('\n')||'No run started.';if(atBottom)log.scrollTop=log.scrollHeight;$('outputs').replaceChildren();for(const path of data.outputs){const item=document.createElement('li');item.textContent=path;$('outputs').append(item);}$('resultArea').hidden=!data.outputs.length;$('environment').textContent='Server Python: '+data.python+(data.settings?.resolved_device?' · Device used: '+data.settings.resolved_device:'');if(data.settings&&restoreSettings&&!$('input').value){restoreSettings=false;$('inputType').value=data.settings.input_type||'nifti';updateInputType();$('input').value=data.settings.input;$('outputParent').value=data.settings.output_parent||parentOf(data.settings.output);$('outputName').value=data.settings.output_name||data.settings.output.split(/[\\/]/).pop();updateOutputPreview();restoreDeviceSelection(data.settings.device);$('radius').value=data.settings.radius;$('echoes').checked=data.settings.all_echoes;restoreModelSelection('cartilage',data.settings.cartilage_model);restoreModelSelection('meniscus',data.settings.meniscus_model);}}
+$('runForm').onsubmit=async event=>{event.preventDefault();$('error').textContent='';$('run').disabled=true;try{render(await api('/api/run',{input:$('input').value,input_type:inputFormat(),output_parent:$('outputParent').value,output_name:$('outputName').value,device:$('device').value,cartilage_model:selectedModelPath('cartilage'),meniscus_model:selectedModelPath('meniscus'),radius:$('radius').value,all_echoes:$('echoes').checked}));}catch(error){showError(error);$('run').disabled=false;}};
+$('stop').onclick=async()=>{try{render(await api('/api/stop',{}));}catch(error){showError(error);}};
+$('downloadLog').onclick=()=>{const blob=new Blob([(latest?.logs||[]).join('\n')],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='segmentation_log.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);};
+async function poll(){if(polling)return;polling=true;try{render(await api('/api/status'));}catch(error){showError(error);$('message').textContent='Cannot connect to the server. Check its terminal.';}finally{polling=false;}}
+poll();loadModels();refreshGPUs();setInterval(poll,1200);
+</script></body></html>

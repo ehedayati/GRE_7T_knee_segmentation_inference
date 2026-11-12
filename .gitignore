@@ -1,0 +1,26 @@
+# Trained weights are distributed separately.
+*.pt
+*.pth
+*.ckpt
+*.pt2
+*.onnx
+
+# Python caches, environments and editor files.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.idea/
+.vscode/
+
+# Generated images and review results.
+*.nii
+*.nii.gz
+*.dcm
+*.log
+converted_input/
+review/
+
+# Include the launchers, even if a surrounding/global rule ignores Bash files.
+!*.sh

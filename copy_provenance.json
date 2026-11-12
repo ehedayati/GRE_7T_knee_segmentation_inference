@@ -1,0 +1,170 @@
+[
+  {
+    "path": "segmentation_postprocessing/postprocess_clusters.py",
+    "source": "segmentation_postprocessing/postprocess_clusters.py",
+    "source_sha256": "36753c75fa63cef84f3830de25a217d0f6d09d90f70f063ec917953ab77704f5",
+    "copied_sha256": "36753c75fa63cef84f3830de25a217d0f6d09d90f70f063ec917953ab77704f5"
+  },
+  {
+    "path": "segmentation_postprocessing/postprocess_interactive.sh",
+    "source": "segmentation_postprocessing/postprocess_interactive.sh",
+    "source_sha256": "de03b32b8692fa03e5d66876ac7cba3bbfbb0bccb9f9078c9a32e5e65d2150fc",
+    "copied_sha256": "de03b32b8692fa03e5d66876ac7cba3bbfbb0bccb9f9078c9a32e5e65d2150fc"
+  },
+  {
+    "path": "segmentation_postprocessing/README.md",
+    "source": "segmentation_postprocessing/README.md",
+    "source_sha256": "04e961012fca5d60632cbddb0ca9bd98c3c49cafe63b0420fbd821e6fd35dc48",
+    "copied_sha256": "04e961012fca5d60632cbddb0ca9bd98c3c49cafe63b0420fbd821e6fd35dc48"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/inference_single.py",
+    "source": "verified_cartilage_models_2026-11-10/inference_single.py",
+    "source_sha256": "53535fdf696fd0eda295563f93c4c45c01de30d79c5d5ac42ad83a024171d473",
+    "copied_sha256": "53535fdf696fd0eda295563f93c4c45c01de30d79c5d5ac42ad83a024171d473"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/manifest.json",
+    "source": "verified_cartilage_models_2026-11-10/manifest.json",
+    "source_sha256": "e4eb7e078f8986f661b69faa187b01c5d1603d48ea1f1fd18d534cd6664d2796",
+    "copied_sha256": "e4eb7e078f8986f661b69faa187b01c5d1603d48ea1f1fd18d534cd6664d2796"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/top1_unet_4echo.pt",
+    "source": "verified_cartilage_models_2026-11-10/top1_unet_4echo.pt",
+    "source_sha256": "120fd8c48f4f97b7588cb6fce8d86c821d262ee83463db9f50d8b10043ced112",
+    "copied_sha256": "120fd8c48f4f97b7588cb6fce8d86c821d262ee83463db9f50d8b10043ced112"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/top2_unet2_3echo.pt",
+    "source": "verified_cartilage_models_2026-11-10/top2_unet2_3echo.pt",
+    "source_sha256": "452cb02dea6fae4088b9b0ebbd82f59ab59ca6cbe10dceb340878466551de680",
+    "copied_sha256": "452cb02dea6fae4088b9b0ebbd82f59ab59ca6cbe10dceb340878466551de680"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/top3_unet2_4echo.pt",
+    "source": "verified_cartilage_models_2026-11-10/top3_unet2_4echo.pt",
+    "source_sha256": "525ef4b12acdf348864dd3b62a8e125d4bef8a289ddeaf10149ad04bb36d4000",
+    "copied_sha256": "525ef4b12acdf348864dd3b62a8e125d4bef8a289ddeaf10149ad04bb36d4000"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/SHA256SUMS",
+    "source": "verified_cartilage_models_2026-11-10/SHA256SUMS",
+    "source_sha256": "db991e36df7da19af9a391649a855db0c550abf564d99d62c62d2f4300cc3e7b",
+    "copied_sha256": "db991e36df7da19af9a391649a855db0c550abf564d99d62c62d2f4300cc3e7b"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/postprocess_clusters.py",
+    "source": "verified_cartilage_models_2026-11-10/postprocess_clusters.py",
+    "source_sha256": "b11e2c982203f14813e39b5d26db0491fc26e56d3d93ad300ea42aa55c1077ab",
+    "copied_sha256": "b11e2c982203f14813e39b5d26db0491fc26e56d3d93ad300ea42aa55c1077ab"
+  },
+  {
+    "path": "verified_cartilage_models_2026-11-10/postprocess_interactive.sh",
+    "source": "verified_cartilage_models_2026-11-10/postprocess_interactive.sh",
+    "source_sha256": "b9230d10276c974949ba4ca9d5e7c3d013ff02cf776d72ca57de2676140f636f",
+    "copied_sha256": "b9230d10276c974949ba4ca9d5e7c3d013ff02cf776d72ca57de2676140f636f"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/segmentation_ui.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/segmentation_ui.py",
+    "source_sha256": "41776f8c7dd7b4da626d1ed6742c907ccda53edb3ac23266a60f4d122e0a353d",
+    "copied_sha256": "41776f8c7dd7b4da626d1ed6742c907ccda53edb3ac23266a60f4d122e0a353d"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/segmentation_ui.html",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/segmentation_ui.html",
+    "source_sha256": "d49b5061922e4d0508cc66e8303578eee224a0868d53b5f88f185e48fc66cb62",
+    "copied_sha256": "d49b5061922e4d0508cc66e8303578eee224a0868d53b5f88f185e48fc66cb62"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/gpu_availability.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/gpu_availability.py",
+    "source_sha256": "503a0a51f4e9f976a645523f31271bec94dd89cb4b825e6770518a487976f4cd",
+    "copied_sha256": "503a0a51f4e9f976a645523f31271bec94dd89cb4b825e6770518a487976f4cd"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/inference_single.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/inference_single.py",
+    "source_sha256": "e4c0df70ba4a9071ea5c7f6ba61be869b80315d50e5606d86ec7bfcc987da5f5",
+    "copied_sha256": "e4c0df70ba4a9071ea5c7f6ba61be869b80315d50e5606d86ec7bfcc987da5f5"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/correct_meniscus_residue.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/correct_meniscus_residue.py",
+    "source_sha256": "df31fbcbbfbb7a56ac16db8d6cf905d7b7e2c67d11fcd07cd189f91565377e56",
+    "copied_sha256": "df31fbcbbfbb7a56ac16db8d6cf905d7b7e2c67d11fcd07cd189f91565377e56"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/merge_cartilage_meniscus.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/merge_cartilage_meniscus.py",
+    "source_sha256": "c392cffe4230b87ceabea4a4ca29c62cc08593bd6fb6dcb66ae353c25c3df148",
+    "copied_sha256": "c392cffe4230b87ceabea4a4ca29c62cc08593bd6fb6dcb66ae353c25c3df148"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/repeat_mask_across_echoes.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/repeat_mask_across_echoes.py",
+    "source_sha256": "f4c44da9790c116667fb2825342b70794e421fccc13ef28e78c7e436c314d9d9",
+    "copied_sha256": "f4c44da9790c116667fb2825342b70794e421fccc13ef28e78c7e436c314d9d9"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/run_combined_segmentation.sh",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/run_combined_segmentation.sh",
+    "source_sha256": "47c5543a0889483dc4841b50d5b07dd4249456b5328593f40722e6d54ce25fee",
+    "copied_sha256": "47c5543a0889483dc4841b50d5b07dd4249456b5328593f40722e6d54ce25fee"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/manifest.json",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/manifest.json",
+    "source_sha256": "a19a489ead5e5bd025dfb11280fd4b336aa91716dc21445958807022c8ea4ef3",
+    "copied_sha256": "a19a489ead5e5bd025dfb11280fd4b336aa91716dc21445958807022c8ea4ef3"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/joint_unet_4echo_five_losses.pt",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/joint_unet_4echo_five_losses.pt",
+    "source_sha256": "335323df05476b8ba6b549d119f751693eba1e26abfab357bb557ef9cdf59868",
+    "copied_sha256": "335323df05476b8ba6b549d119f751693eba1e26abfab357bb557ef9cdf59868"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/postprocess_clusters.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/postprocess_clusters.py",
+    "source_sha256": "d5a2624d5ecaecc49c060604efa36c1200a5503430816dc286ca57409a85735f",
+    "copied_sha256": "d5a2624d5ecaecc49c060604efa36c1200a5503430816dc286ca57409a85735f"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/postprocess_interactive.sh",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/postprocess_interactive.sh",
+    "source_sha256": "b2a2f363aa66beae7d8018782a94f65131e74973c0b420294c4b845974a5fa2c",
+    "copied_sha256": "b2a2f363aa66beae7d8018782a94f65131e74973c0b420294c4b845974a5fa2c"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_segmentation_ui.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_segmentation_ui.py",
+    "source_sha256": "42a2349196d8e3215523ffc8c667799227fa768eead43cc789f7ebe712195d72",
+    "copied_sha256": "42a2349196d8e3215523ffc8c667799227fa768eead43cc789f7ebe712195d72"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_gpu_availability.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_gpu_availability.py",
+    "source_sha256": "07aa5430bf4465584fc8ef5e07784946da0eb49c5f1ea9cbb33ce9b406acbf5c",
+    "copied_sha256": "07aa5430bf4465584fc8ef5e07784946da0eb49c5f1ea9cbb33ce9b406acbf5c"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_meniscus_residue.py",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_meniscus_residue.py",
+    "source_sha256": "35995fba043751d6b33e190097f8c71f68dc9e78cd0851fbaa4f388cd53983c2",
+    "copied_sha256": "35995fba043751d6b33e190097f8c71f68dc9e78cd0851fbaa4f388cd53983c2"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_device_dropdown.js",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_device_dropdown.js",
+    "source_sha256": "4531702d5ae75c78ba294a27596b6f94e967d90010e15f3e4f967ade3a9b08ea",
+    "copied_sha256": "4531702d5ae75c78ba294a27596b6f94e967d90010e15f3e4f967ade3a9b08ea"
+  },
+  {
+    "path": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_model_selection.js",
+    "source": "verified_meniscus_and_cartilage_models_2026-11-11/tests/test_model_selection.js",
+    "source_sha256": "9add31aecde61318ff57ed537df8cf1bbd55bde8c10e16411455ce41ca9c2dea",
+    "copied_sha256": "9add31aecde61318ff57ed537df8cf1bbd55bde8c10e16411455ce41ca9c2dea"
+  }
+]
