@@ -19,7 +19,7 @@
     "Added Installation section documenting user-verified MRIForge environment plus nvidia-ml-py, with io/torch extras for fresh installs",
     "Documented mriforge[all] as an alternative to mriforge[io,torch], each followed by nvidia-ml-py",
     "Added GRE DICOM series-folder UI input, MRIForge conversion adapter, saved NIfTI/sidecar, conversion progress/cancellation and DICOM regression tests; documented MRIForge conversion compatibility advice",
-    "Prepared standalone repository publishing guide and local .gitignore; documented separate model distribution and made root checksums independent of weights"
+    "Prepared standalone repository .gitignore; documented separate model distribution and made root checksums independent of weights"
   ],
   "validation": "Synthetic/mocked tests, checkpoint strict-loading without forward passes, and random-weight synthetic network parity; no MRI inference or patient mask processing",
   "checks": {
@@ -71,5 +71,5 @@
   "distribution": "Standalone inference repository rooted at this directory; trained checkpoints distributed separately",
   "supported_model_count": 4,
   "weights_in_git": false,
-  "checksum_scope": "Root SHA256SUMS: published code/documentation/manifests, excluding checkpoints, caches and Git metadata; model directories retain weight-only SHA256SUMS"
+  "checksum_scope": "Root SHA256SUMS: published code/documentation/manifests, excluding checkpoints, private publishing notes, caches and Git metadata; model directories retain weight-only SHA256SUMS"
 }

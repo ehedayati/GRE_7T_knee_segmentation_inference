@@ -4,7 +4,7 @@ Standalone inference application for knee cartilage and meniscus segmentation.
 This directory is the application/repository root. Keep its files and
 subdirectories together; paths are relative to the application, and the research
 checkout is not needed. Trained weights are distributed separately and excluded
-from Git. See [PUBLISHING.md](PUBLISHING.md) to create the standalone repository.
+from Git.
 
 ## Installation
 

@@ -24,3 +24,7 @@ review/
 
 # Include the launchers, even if a surrounding/global rule ignores Bash files.
 !*.sh
+
+# Private maintainer publishing notes.
+/PUBLISHING.md
+/publish.md
