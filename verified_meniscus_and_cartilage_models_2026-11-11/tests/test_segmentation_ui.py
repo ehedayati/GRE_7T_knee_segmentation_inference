@@ -187,6 +187,21 @@ if 'missing' not in a.input:out.with_name('gre.json').write_text('{}')
         with self.assertRaisesRegex(ValueError,'Converted input directory already exists'):
             self.panel.start(self.payload(input=str(source),input_type='dicom'))
 
+    def test_default_weight_directory_layout(self):
+        application=MODULE_PATH.parents[1]
+        panel=ui.Panel(self.root,self.pipeline,bash=sys.executable)
+        expected={'cartilage':application/'weights/cartilage',
+                  'meniscus':application/'weights/joint'}
+        self.assertEqual(panel.model_dirs,{role:folder.resolve() for role,folder in expected.items()})
+        for role,folder in expected.items():
+            manifest=json.loads((folder/'manifest.json').read_text(encoding='utf-8'))
+            self.assertTrue(any(entry['checkpoint']==panel.default_models[role].name
+                                for entry in manifest['models']))
+            for entry in manifest['models']:
+                classes=3 if role=='cartilage' else 5
+                self.assertEqual(entry['inference']['out_channel'],classes)
+            self.assertTrue((folder/'SHA256SUMS').is_file())
+
     def test_browser(self):
         (self.root/'folder').mkdir()
         (self.root/'note.txt').write_text('not an MRI')

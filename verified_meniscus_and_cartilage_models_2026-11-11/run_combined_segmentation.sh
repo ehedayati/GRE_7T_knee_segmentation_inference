@@ -38,8 +38,9 @@ fi
 [[ "$OUT" == /* ]] || OUT="$PWD/$OUT"
 JOINT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 CART_DIR="$JOINT_DIR/../verified_cartilage_models_2026-11-10"
-CART_MODEL=${CARTILAGE_MODEL_PATH:-"$CART_DIR/top3_unet2_4echo.pt"}
-JOINT_MODEL=${MENISCUS_MODEL_PATH:-"$JOINT_DIR/joint_unet_4echo_five_losses.pt"}
+WEIGHTS_DIR="$JOINT_DIR/../weights"
+CART_MODEL=${CARTILAGE_MODEL_PATH:-"$WEIGHTS_DIR/cartilage/top3_unet2_4echo.pt"}
+JOINT_MODEL=${MENISCUS_MODEL_PATH:-"$WEIGHTS_DIR/joint/joint_unet_4echo_five_losses.pt"}
 [[ "$CART_MODEL" == /* ]] || CART_MODEL="$PWD/$CART_MODEL"
 [[ "$JOINT_MODEL" == /* ]] || JOINT_MODEL="$PWD/$JOINT_MODEL"
 CART_MANIFEST="$(dirname -- "$CART_MODEL")/manifest.json"

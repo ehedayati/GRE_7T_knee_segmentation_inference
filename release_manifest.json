@@ -5,9 +5,9 @@
   "ui_entrypoint": "start_ui.py",
   "cli_entrypoint": "run_segmentation.sh",
   "environment_status": "Install mriforge[io,torch] or mriforge[all], plus nvidia-ml-py; exact dependency versions not pinned",
-  "default_cartilage_model": "verified_cartilage_models_2026-11-10/top3_unet2_4echo.pt",
-  "default_meniscus_model": "verified_meniscus_and_cartilage_models_2026-11-11/joint_unet_4echo_five_losses.pt",
-  "package_layout": "Sibling directories preserved; no dependency on the original research checkout",
+  "default_cartilage_model": "weights/cartilage/top3_unet2_4echo.pt",
+  "default_meniscus_model": "weights/joint/joint_unet_4echo_five_losses.pt",
+  "package_layout": "Shared application code with separate weights/cartilage and weights/joint directories; no dependency on the research checkout",
   "original_sources_unchanged": true,
   "release_only_changes": [
     "Joint manifest retains only five-loss checkpoint; removes rejected three-loss evaluation entry; marks user-reviewed workflow status",
@@ -19,7 +19,8 @@
     "Added Installation section documenting user-verified MRIForge environment plus nvidia-ml-py, with io/torch extras for fresh installs",
     "Documented mriforge[all] as an alternative to mriforge[io,torch], each followed by nvidia-ml-py",
     "Added GRE DICOM series-folder UI input, MRIForge conversion adapter, saved NIfTI/sidecar, conversion progress/cancellation and DICOM regression tests; documented MRIForge conversion compatibility advice",
-    "Prepared standalone repository .gitignore; documented separate model distribution and made root checksums independent of weights"
+    "Prepared standalone repository .gitignore; documented separate model distribution and made root checksums independent of weights",
+    "Moved weight manifests/checksums to weights/cartilage and weights/joint; updated UI/Bash defaults and README placement instructions; checkpoint bytes and filenames unchanged"
   ],
   "validation": "Synthetic/mocked tests, checkpoint strict-loading without forward passes, and random-weight synthetic network parity; no MRI inference or patient mask processing",
   "checks": {
@@ -28,7 +29,7 @@
     "bash_syntax": "passed",
     "root_entrypoint_help_checks": "passed",
     "packaged_model_catalog": "3 cartilage, 1 joint/meniscus",
-    "checkpoint_hashes": "verified",
+    "checkpoint_hashes": "Relocated manifests/checksum lists verified against the four preserved archive checkpoints; binaries not copied into this checkout",
     "original_source_hashes": "unchanged",
     "real_inference_executed": false,
     "patient_masks_processed": false,
@@ -36,12 +37,16 @@
     "monai_reference_version": "1.6.0",
     "torch_validation_version": "2.14.0+cpu",
     "monai_blocked_import": "Both inference runners --help passed from unrelated working directory with MONAI imports blocked",
-    "checkpoint_strict_loading": "All four preserved checkpoints loaded with strict=True; no checkpoint forward pass executed",
+    "checkpoint_strict_loading": "All four original checkpoints previously verified with strict=True; relocation changes only their lookup paths, not the network or checkpoint files",
     "server_inference_after_network_replacement": "pending user verification",
     "gpu_diagnostics_regression": "Missing nvidia-ml-py remains an explicit utilization warning; driver failures retain their own errors",
     "dicom_regression": "Synthetic DICOM headers plus mocked standard MRIForge conversion and inference; conversion order, saved NIfTI/sidecar, mixed-series rejection, echo/size checks, cancellation, failures and browser format/selection/progress passed",
     "dicom_converter_api": "Standard mrif.utilities.io.dicom_to_nifti, also used by MRIForge CLI; no local pixel reconstruction, reorientation or resampling",
-    "patient_dicoms_converted": false
+    "patient_dicoms_converted": false,
+    "python_tests_run": 71,
+    "python_tests_skipped": 1,
+    "skipped_test_reason": "Strict checkpoint-loading test skipped: separately distributed weight files are not installed in this checkout",
+    "weights_layout": "UI defaults, manifests, class counts and model checksum lists agree on weights/cartilage and weights/joint; new default paths are ignored by Git"
   },
   "runtime_dependencies": [
     "torch",
@@ -71,5 +76,9 @@
   "distribution": "Standalone inference repository rooted at this directory; trained checkpoints distributed separately",
   "supported_model_count": 4,
   "weights_in_git": false,
-  "checksum_scope": "Root SHA256SUMS: published code/documentation/manifests, excluding checkpoints, private publishing notes, caches and Git metadata; model directories retain weight-only SHA256SUMS"
+  "checksum_scope": "Root SHA256SUMS: published code/documentation/manifests, excluding checkpoints, private publishing notes, caches and Git metadata; weights/cartilage and weights/joint retain weight-only SHA256SUMS",
+  "weights_directories": {
+    "cartilage": "weights/cartilage",
+    "joint": "weights/joint"
+  }
 }

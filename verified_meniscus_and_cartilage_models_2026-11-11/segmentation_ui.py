@@ -33,7 +33,8 @@ DICOM_NAMES = ['converted_input/gre.nii.gz', 'converted_input/gre.json']
 
 class Panel:
     def __init__(self, start_dir=HERE.parent, pipeline=HERE/'run_combined_segmentation.sh', bash=None,
-                 cartilage_dir=HERE.parent/'verified_cartilage_models_2026-11-10', meniscus_dir=HERE,
+                 cartilage_dir=HERE.parent/'weights'/'cartilage',
+                 meniscus_dir=HERE.parent/'weights'/'joint',
                  converter=HERE/'convert_gre_dicom.py'):
         self.start_dir = Path(start_dir).expanduser().resolve()
         self.pipeline = Path(pipeline).resolve()

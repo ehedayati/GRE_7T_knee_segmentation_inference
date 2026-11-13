@@ -28,20 +28,50 @@ server's NVIDIA driver.
 
 ## Model weights
 
-Obtain the trained checkpoints separately and copy them into these paths
-relative to the application root. The default workflow requires:
+Place the trained weights in `weights/cartilage/` and `weights/joint/` relative
+to the application root. Both the UI and command-line launcher use these folders
+by default. The folders already contain the required manifests and checksums.
 
-- `verified_cartilage_models_2026-11-10/top3_unet2_4echo.pt`
-- `verified_meniscus_and_cartilage_models_2026-11-11/joint_unet_4echo_five_losses.pt`
+The default workflow needs these two checkpoint files:
 
-Optional alternative cartilage checkpoints:
+```text
+weights/
+  cartilage/
+    manifest.json
+    SHA256SUMS
+    top3_unet2_4echo.pt
+  joint/
+    manifest.json
+    SHA256SUMS
+    joint_unet_4echo_five_losses.pt
+```
 
-- `verified_cartilage_models_2026-11-10/top1_unet_4echo.pt`
-- `verified_cartilage_models_2026-11-10/top2_unet2_3echo.pt`
+- **Cartilage weights:** `weights/cartilage/top3_unet2_4echo.pt` supplies the
+  preferred four-echo UNet2 cartilage prediction (labels 1 and 2).
+- **Joint weights:** `weights/joint/joint_unet_4echo_five_losses.pt` supplies the
+  cartilage/meniscus network; this workflow uses its meniscus labels 3 and 4.
 
-Keep the supplied manifest.json beside each set of weights. Inference verifies
-the selected checkpoint's SHA-256 against its manifest. The .gitignore keeps
-these weights local; Python network definitions remain part of the repository.
+From the application root, copy the separately supplied checkpoints:
+
+```bash
+cp /path/to/top3_unet2_4echo.pt weights/cartilage/
+cp /path/to/joint_unet_4echo_five_losses.pt weights/joint/
+```
+
+Keep the exact checkpoint filenames and the supplied manifests. Inference
+verifies the selected checkpoint's SHA-256 against the adjacent manifest.
+The weights are excluded from Git; manifests and Python network definitions
+are included. No UI model-path changes are needed for the two defaults.
+
+Optional alternative cartilage checkpoints go in `weights/cartilage/` as well:
+
+- `top1_unet_4echo.pt`
+- `top2_unet2_3echo.pt`
+
+After copying weights, start or reload the UI to refresh its network catalog.
+Custom checkpoint locations remain supported through the Networks panel or the
+CARTILAGE_MODEL_PATH and MENISCUS_MODEL_PATH environment variables; each custom
+location needs its own matching manifest.json.
 
 ## Start the browser UI
 
@@ -300,8 +330,8 @@ sha256sum -c SHA256SUMS
 
 The root checksum file covers the published code, documentation and manifests;
 it excludes itself, trained weights, Git metadata and generated Python caches.
-It can be checked before obtaining the weights. Each model directory has a
-separate weight-only SHA256SUMS for checking the checkpoints after copying them. copy_provenance.json records the
+It can be checked before obtaining the weights. The weights/cartilage and
+weights/joint folders each have a separate weight-only SHA256SUMS for checking the checkpoints after copying them. copy_provenance.json records the
 source files and their initial copy hashes. release_manifest.json identifies
 the snapshot and records intentional changes to the copied joint manifest and
 release-only inference code. The initial-copy hashes remain historical; use
@@ -313,7 +343,8 @@ mock MRIForge writer and check ordering, geometry preservation, failure and
 cancellation behavior. Network tests load checkpoints without a forward pass and compare
 randomly initialized networks on small synthetic tensors. The reference-parity
 test is skipped when optional MONAI is absent; it is not a deployment dependency.
-Restore all four checkpoint files before running the full Python test suite:
+The checkpoint-loading test is skipped unless all four separately supplied
+weights are present in weights/cartilage and weights/joint:
 
 ```bash
 python -B -m unittest discover -s verified_meniscus_and_cartilage_models_2026-11-11/tests -p 'test_*.py' -v

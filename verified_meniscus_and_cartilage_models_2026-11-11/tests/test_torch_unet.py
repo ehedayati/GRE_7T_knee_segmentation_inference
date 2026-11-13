@@ -44,12 +44,18 @@ class NetworkTests(unittest.TestCase):
         torch.set_num_threads(cls.old_threads)
 
     def test_all_four_checkpoints_load_strictly_without_forward_pass(self):
-        for path in RUNNERS:
+        weight_dirs = (ROOT / "weights/cartilage", ROOT / "weights/joint")
+        missing = [folder / entry["checkpoint"] for folder in weight_dirs
+                   for entry in json.loads((folder/"manifest.json").read_text(encoding="utf-8"))["models"]
+                   if not (folder/entry["checkpoint"]).is_file()]
+        if missing:
+            self.skipTest("Separately supplied weights are missing; restore all four checkpoints to run strict-loading verification")
+        for path, folder in zip(RUNNERS, weight_dirs):
             runner = load_runner(path)
-            manifest = json.loads(path.with_name("manifest.json").read_text(encoding="utf-8"))
+            manifest = json.loads((folder/"manifest.json").read_text(encoding="utf-8"))
             for entry in manifest["models"]:
                 with self.subTest(checkpoint=entry["checkpoint"]):
-                    checkpoint = path.with_name(entry["checkpoint"])
+                    checkpoint = folder / entry["checkpoint"]
                     cfg = runner.load_settings(checkpoint)
                     model = runner.load_model(cfg, checkpoint, torch.device("cpu"))
                     self.assertIsInstance(model, UNet3D)
